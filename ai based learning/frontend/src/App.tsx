@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate
+} from 'react-router-dom';
+
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { LearningStudio } from './pages/LearningStudio';
+import { IGOTLearning } from './pages/IGOTLearning';
+
 import { getHealthStatus } from './api/ai';
 import { HealthResponse } from './types';
 
@@ -14,6 +22,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     const fetchHealth = async () => {
       setIsLoadingHealth(true);
+
       try {
         const res = await getHealthStatus();
         setHealth(res);
@@ -26,26 +35,58 @@ export const App: React.FC = () => {
     };
 
     fetchHealth();
-    const interval = setInterval(fetchHealth, 30000); // Poll health status every 30s
+
+    const interval = setInterval(fetchHealth, 30000);
+
     return () => clearInterval(interval);
   }, []);
 
   return (
     <Router>
       <div className="min-h-screen flex flex-col bg-slate-50">
-        <Header health={health} isLoadingHealth={isLoadingHealth} />
+
+        <Header
+          health={health}
+          isLoadingHealth={isLoadingHealth}
+        />
 
         <div className="flex flex-1">
-          <Sidebar currentTab={currentTab} onTabChange={setCurrentTab} />
+
+          <Sidebar
+            currentTab={currentTab}
+            onTabChange={setCurrentTab}
+          />
 
           <main className="flex-1 p-6 overflow-y-auto">
+
             <Routes>
-              <Route path="/" element={<LearningStudio />} />
-              <Route path="/studio" element={<LearningStudio />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
+
+              <Route
+                path="/"
+                element={<LearningStudio />}
+              />
+
+              <Route
+                path="/studio"
+                element={<LearningStudio />}
+              />
+
+              <Route
+                path="/igot-learning"
+                element={<IGOTLearning />}
+              />
+
+              <Route
+                path="*"
+                element={<Navigate to="/" replace />}
+              />
+
             </Routes>
+
           </main>
+
         </div>
+
       </div>
     </Router>
   );

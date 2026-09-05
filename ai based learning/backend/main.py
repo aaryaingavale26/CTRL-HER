@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from config import settings
 from routes import health, ai, documents, search, assessment, learners, learning_assistant
+from routes.igot import router as igot_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -26,7 +27,7 @@ app.include_router(search.router, prefix=settings.API_PREFIX)
 app.include_router(assessment.router, prefix=settings.API_PREFIX)
 app.include_router(learners.router, prefix=settings.API_PREFIX)
 app.include_router(learning_assistant.router, prefix=settings.API_PREFIX)
-
+app.include_router(igot_router)
 @app.get("/")
 def root_redirect():
     return {

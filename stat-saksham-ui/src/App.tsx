@@ -22,6 +22,7 @@ import {
   Bot,
   AlertTriangle,
 } from "lucide-react";
+import IGOTLearning from "./features/igot/IGOTLearning";
 
 // Official Government Learner Dashboard View
 const DashboardView = () => {
@@ -422,6 +423,10 @@ export default function App() {
                 />
               }
             />
+            <Route
+  path="/igot-learning"
+  element={<IGOTLearning />}
+/>
             <Route
               path="/assessment"
               element={

@@ -38,3 +38,14 @@ class LearnerProgressProfile(BaseModel):
     topics_needing_review: int = Field(default=0)
     improving_topics: int = Field(default=0)
     overall_accuracy: float = Field(default=0.0)
+
+class CompetencyGap(BaseModel):
+    competency: str
+    accuracy: float
+    status: str
+
+class CompetencyGapsResponse(BaseModel):
+    learner_id: str
+    source: str
+    skill_gaps: List[str] = Field(default_factory=list)
+    gaps: List[CompetencyGap] = Field(default_factory=list)

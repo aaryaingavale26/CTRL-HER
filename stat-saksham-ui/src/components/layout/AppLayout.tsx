@@ -5,6 +5,7 @@ import {
   LayoutDashboard,
   Award,
   BookOpen,
+  GraduationCap,
   FileCheck,
   Bot,
   Compass,
@@ -43,6 +44,11 @@ export const AppLayout = () => {
     { label: t("nav.quest"), icon: Compass, path: "/quest" },
     { label: t("nav.analytics"), icon: BarChart3, path: "/analytics" },
     { label: t("nav.notices"), icon: Radio, path: "/notices" },
+    {
+  label: "iGOT Learning",
+  icon: GraduationCap,
+  path: "/igot-learning",
+},
   ];
 
   const textSizeClass =

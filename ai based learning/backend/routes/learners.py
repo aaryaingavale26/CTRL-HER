@@ -3,7 +3,12 @@ import logging
 from urllib.parse import unquote
 from datetime import datetime
 from fastapi import APIRouter, HTTPException, status
-from models.learner_progress import LearnerProgressProfile, LearnerTopicProgress
+from models.learner_progress import (
+    CompetencyGap,
+    CompetencyGapsResponse,
+    LearnerProgressProfile,
+    LearnerTopicProgress,
+)
 from models.recommendation import PersonalizedRecommendation, PersonalizedPracticeRequest
 from models.assessment import (
     QuizResponse,
@@ -54,6 +59,22 @@ def get_learner_topic_progress(learner_id: str, topic: str):
     )
 
 
+@router.get("/{learner_id}/competency-gaps", response_model=CompetencyGapsResponse)
+def get_competency_gaps(learner_id: str):
+    """Return gaps calculated from the learner's persisted assessment progress."""
+    profile = get_learner_progress_repository().get_progress(learner_id)
+    gaps = [
+        CompetencyGap(competency=topic.topic, accuracy=topic.accuracy, status=topic.status)
+        for topic in profile.topics.values()
+        if topic.status == "NEEDS_REVIEW" or topic.accuracy < 70
+    ]
+    gaps.sort(key=lambda gap: gap.accuracy)
+    return CompetencyGapsResponse(
+        learner_id=learner_id,
+        source="ASSESSMENT_PROGRESS",
+        skill_gaps=[gap.competency for gap in gaps],
+        gaps=gaps,
+    )
 # =====================================================================
 # Phase 3E: Personalized Recommendation & Practice Endpoints
 # =====================================================================
